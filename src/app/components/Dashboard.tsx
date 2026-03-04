@@ -116,10 +116,10 @@ const CSS = `
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
     :root {
-        --bg: #0A0908; --surface: rgba(255,255,255,0.03); --surface2: rgba(255,255,255,0.06);
-        --border: rgba(255,255,255,0.06); --border-accent: rgba(234,179,8,0.2);
-        --gold: #EAB308; --gold-dim: #CA8A04; --gold-glow: rgba(234,179,8,0.15);
-        --text: #FAFAF9; --text2: #A8A29E; --text3: #57534E;
+        --bg: #0D0500; --surface: rgba(255,100,0,0.05); --surface2: rgba(255,100,0,0.09);
+        --border: rgba(255,100,0,0.12); --border-accent: rgba(255,107,0,0.35);
+        --gold: #FF6B00; --gold-dim: #E05500; --gold-glow: rgba(255,107,0,0.15);
+        --text: #FFF5EC; --text2: #C4956A; --text3: #7A5038;
         --red: #EF4444; --green: #22C55E;
         --font: 'Outfit', sans-serif; --mono: 'JetBrains Mono', monospace;
         --radius: 14px; --radius-sm: 8px;
@@ -129,17 +129,18 @@ const CSS = `
     .app {
         min-height: 100vh; background: var(--bg); color: var(--text);
         font-family: var(--font); overflow-x: hidden;
-        background-image: radial-gradient(ellipse at 50% 0%, rgba(234,179,8,0.03) 0%, transparent 60%);
+        background-image: radial-gradient(ellipse at 50% 0%, rgba(255,107,0,0.08) 0%, transparent 55%),
+                          radial-gradient(ellipse at 80% 100%, rgba(255,60,0,0.04) 0%, transparent 50%);
     }
     .header {
         padding: 20px 20px 16px; border-bottom: 1px solid var(--border);
         position: sticky; top: 0; z-index: 50;
-        background: rgba(10,9,8,0.92); backdrop-filter: blur(20px);
+        background: rgba(13,5,0,0.94); backdrop-filter: blur(20px);
     }
     .header-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
     .header h1 {
         font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #FBBF24, #EAB308);
+        background: linear-gradient(135deg, #FF8C35, #FF6B00);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .header-sub { font-size: 11px; color: var(--text3); font-family: var(--mono); letter-spacing: 0.05em; }
@@ -147,7 +148,7 @@ const CSS = `
         display: flex; gap: 0; border-bottom: 1px solid var(--border);
         padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch;
         scrollbar-width: none; position: sticky; top: 57px; z-index: 40;
-        background: rgba(10,9,8,0.92); backdrop-filter: blur(20px);
+        background: rgba(13,5,0,0.94); backdrop-filter: blur(20px);
     }
     .tabs::-webkit-scrollbar { display: none; }
     .tab {
@@ -163,7 +164,7 @@ const CSS = `
         border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
     }
     .card-accent {
-        background: linear-gradient(135deg, var(--gold-glow), rgba(234,179,8,0.05));
+        background: linear-gradient(135deg, var(--gold-glow), rgba(255,107,0,0.05));
         border-color: var(--border-accent);
     }
     .card-label {
@@ -172,14 +173,14 @@ const CSS = `
     }
 
     .today-hero {
-        background: linear-gradient(145deg, rgba(234,179,8,0.08), rgba(234,179,8,0.02));
+        background: linear-gradient(145deg, rgba(255,107,0,0.10), rgba(255,107,0,0.03));
         border: 1px solid var(--border-accent);
         border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
         position: relative; overflow: hidden;
     }
     .today-hero::before {
         content: ''; position: absolute; top: -60%; right: -20%; width: 200px; height: 200px;
-        background: radial-gradient(circle, rgba(234,179,8,0.08), transparent 70%);
+        background: radial-gradient(circle, rgba(255,107,0,0.10), transparent 70%);
         pointer-events: none;
     }
     .today-date { font-size: 13px; color: var(--gold-dim); font-family: var(--mono); margin-bottom: 6px; }
@@ -228,7 +229,7 @@ const CSS = `
     .btn-lg { padding: 14px 24px; font-size: 15px; border-radius: 12px; }
 
     .cta-card {
-        background: linear-gradient(145deg, rgba(234,179,8,0.06), rgba(234,179,8,0.02));
+        background: linear-gradient(145deg, rgba(255,107,0,0.07), rgba(255,107,0,0.02));
         border: 2px dashed var(--border-accent); border-radius: var(--radius);
         padding: 40px 24px; text-align: center; margin-bottom: 16px;
     }
@@ -248,7 +249,7 @@ const CSS = `
     .progress-bar-wrap { height: 8px; border-radius: 4px; background: var(--surface2); overflow: hidden; }
     .progress-fill {
         height: 100%; border-radius: 4px;
-        background: linear-gradient(90deg, #CA8A04, #EAB308, #FBBF24);
+        background: linear-gradient(90deg, #E05500, #FF6B00, #FF8C35);
         transition: width 1s cubic-bezier(.4,0,.2,1);
     }
 
@@ -307,21 +308,29 @@ const CSS = `
     .auth-screen {
         min-height: 100vh; display: flex; align-items: center; justify-content: center;
         background: var(--bg); padding: 20px;
-        background-image: radial-gradient(ellipse at 50% 0%, rgba(234,179,8,0.03) 0%, transparent 60%);
+        background-image: radial-gradient(ellipse at 50% 0%, rgba(255,107,0,0.10) 0%, transparent 60%);
     }
     .auth-card {
         width: 100%; max-width: 400px;
         background: var(--surface); border: 1px solid var(--border);
         border-radius: var(--radius); padding: 32px 24px;
     }
-    .auth-logo { font-size: 48px; text-align: center; margin-bottom: 16px; }
+    .auth-logo {
+        font-size: 64px; text-align: center; margin-bottom: 8px;
+        color: var(--gold); line-height: 1;
+        text-shadow: 0 0 40px rgba(255,107,0,0.5);
+    }
     .auth-title {
         font-size: 24px; font-weight: 700; text-align: center;
-        background: linear-gradient(135deg, #FBBF24, #EAB308);
+        background: linear-gradient(135deg, #FF8C35, #FF6B00);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         margin-bottom: 4px;
     }
-    .auth-sub { font-size: 12px; color: var(--text3); text-align: center; font-family: var(--mono); margin-bottom: 24px; }
+    .auth-mantra {
+        font-size: 11px; color: var(--text2); text-align: center;
+        letter-spacing: 0.05em; line-height: 1.8; margin-bottom: 2px;
+    }
+    .auth-sub { font-size: 11px; color: var(--text3); text-align: center; font-family: var(--mono); margin-top: 12px; margin-bottom: 20px; }
     .auth-btn {
         width: 100%; padding: 14px 20px; border-radius: 12px; font-size: 15px;
         font-family: var(--font); font-weight: 600; cursor: pointer; transition: all 0.15s;
@@ -376,9 +385,169 @@ function Ring({ percent, size = 140 }: { percent: number; size?: number }) {
                 strokeDasharray={circ} strokeDashoffset={circ * (1 - p / 100)} strokeLinecap="round"
                 style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)' }} />
             <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#EAB308" /><stop offset="100%" stopColor="#F59E0B" />
+                <stop offset="0%" stopColor="#FF6B00" /><stop offset="100%" stopColor="#FF8C35" />
             </linearGradient></defs>
         </svg>
+    );
+}
+
+/** ISKCON-style Vaishnava Tilak logo inside a lotus-mandala circle */
+function ISKCONLogo({ size = 32 }: { size?: number }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Outer dashed ring */}
+            <circle cx="50" cy="50" r="47" stroke="#FF6B00" strokeWidth="1.5" strokeDasharray="3 2.5" opacity="0.55"/>
+
+            {/* 16 outer lotus petals */}
+            {Array.from({ length: 16 }, (_, i) => (
+                <g key={`op${i}`} transform={`rotate(${i * 22.5}, 50, 50)`}>
+                    <ellipse cx="50" cy="10" rx="4.5" ry="11" fill="#FF6B00" opacity="0.22"/>
+                </g>
+            ))}
+            {/* 8 mid lotus petals (offset) */}
+            {Array.from({ length: 8 }, (_, i) => (
+                <g key={`mp${i}`} transform={`rotate(${i * 45}, 50, 50)`}>
+                    <ellipse cx="50" cy="21" rx="5" ry="9.5" fill="#FF8C35" opacity="0.42"/>
+                </g>
+            ))}
+
+            {/* Inner glow ring */}
+            <circle cx="50" cy="50" r="17" fill="#FF6B00" fillOpacity="0.07" stroke="#FF6B00" strokeWidth="0.8" strokeOpacity="0.3"/>
+
+            {/* ── Vaishnava Tilak — the sacred ISKCON mark ── */}
+            {/* Left arm (curves outward slightly at top) */}
+            <path d="M42 37 C39 41 39 54 41 64 L44 64 C42 54 42 41 45 37 Z" fill="#FF6B00" opacity="0.85"/>
+            {/* Right arm */}
+            <path d="M58 37 C61 41 61 54 59 64 L56 64 C58 54 58 41 55 37 Z" fill="#FF6B00" opacity="0.85"/>
+            {/* Central tulsi-leaf mark */}
+            <path d="M50 33 C48 38 47.5 52 48.5 64 L51.5 64 C52.5 52 52 38 50 33 Z" fill="#FF6B00"/>
+            {/* Top bindu */}
+            <circle cx="50" cy="30" r="4" fill="#FF6B00"/>
+        </svg>
+    );
+}
+
+/** Vrindavan-inspired background decorations: lotus mandala, peacock feathers,
+ *  Krishna's bansuri flute, and Kadamba blossoms — all at very low opacity */
+function VrindavanBg() {
+    const c = '#FF6B00';
+    return (
+        <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
+
+            {/* ── Large Radha-lotus mandala — top centre (bleeds off-screen) ── */}
+            <svg style={{ position: 'absolute', top: -190, left: '50%', transform: 'translateX(-50%)', opacity: 0.045 }}
+                 width="560" height="560" viewBox="0 0 200 200">
+                {Array.from({ length: 24 }, (_, i) => (
+                    <g key={i} transform={`rotate(${i * 15}, 100, 100)`}>
+                        <ellipse cx="100" cy="17" rx="7" ry="22" fill={c}/>
+                    </g>
+                ))}
+                {Array.from({ length: 16 }, (_, i) => (
+                    <g key={i} transform={`rotate(${i * 22.5 + 7.5}, 100, 100)`}>
+                        <ellipse cx="100" cy="34" rx="5.5" ry="16" fill={c} opacity="0.65"/>
+                    </g>
+                ))}
+                {Array.from({ length: 8 }, (_, i) => (
+                    <g key={i} transform={`rotate(${i * 45}, 100, 100)`}>
+                        <ellipse cx="100" cy="51" rx="5" ry="12" fill={c} opacity="0.45"/>
+                    </g>
+                ))}
+                <circle cx="100" cy="100" r="23" fill={c}/>
+                {/* Inner tilak in mandala center */}
+                <path d="M97 88 C94 92 94 100 96 108 L100 108 C98 100 98 92 101 88 Z" fill="rgba(255,255,255,0.3)"/>
+                <path d="M103 88 C106 92 106 100 104 108 L100 108 C102 100 102 92 99 88 Z" fill="rgba(255,255,255,0.3)"/>
+                <path d="M100 86 C99 91 98.5 99 99 108 L101 108 C101.5 99 101 91 100 86 Z" fill="rgba(255,255,255,0.5)"/>
+                <circle cx="100" cy="84" r="2.5" fill="rgba(255,255,255,0.5)"/>
+            </svg>
+
+            {/* ── Left peacock feather (Shri Krishna's peacock crown) ── */}
+            <svg style={{ position: 'absolute', left: -28, top: '22%', opacity: 0.055, transform: 'rotate(-8deg)' }}
+                 width="112" height="340" viewBox="0 0 56 170">
+                <path d="M28 168 C27 130 27 78 28 9" stroke={c} strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                {Array.from({ length: 24 }, (_, i) => {
+                    const y = 14 + i * 6.5;
+                    const sp = Math.sin(Math.min((i + 1) / 9, 1) * Math.PI) * 19 + 3;
+                    return (
+                        <g key={i}>
+                            <path d={`M28 ${y} Q${28 - sp * 0.55} ${y + 1} ${28 - sp} ${y - sp * 0.32}`} stroke={c} strokeWidth="0.85" fill="none" strokeLinecap="round"/>
+                            <path d={`M28 ${y} Q${28 + sp * 0.55} ${y + 1} ${28 + sp} ${y - sp * 0.32}`} stroke={c} strokeWidth="0.85" fill="none" strokeLinecap="round"/>
+                        </g>
+                    );
+                })}
+                {/* Ocellus (eye) */}
+                <ellipse cx="28" cy="11" rx="16" ry="20" stroke={c} strokeWidth="1.5" fill="none"/>
+                <ellipse cx="28" cy="11" rx="9" ry="11" fill={c} opacity="0.42"/>
+                <circle cx="28" cy="11" r="4.5" fill={c}/>
+                <circle cx="26" cy="9" r="1.5" fill="white" opacity="0.55"/>
+            </svg>
+
+            {/* ── Right peacock feather (mirrored) ── */}
+            <svg style={{ position: 'absolute', right: -28, top: '18%', opacity: 0.055, transform: 'rotate(8deg) scaleX(-1)' }}
+                 width="112" height="340" viewBox="0 0 56 170">
+                <path d="M28 168 C27 130 27 78 28 9" stroke={c} strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                {Array.from({ length: 24 }, (_, i) => {
+                    const y = 14 + i * 6.5;
+                    const sp = Math.sin(Math.min((i + 1) / 9, 1) * Math.PI) * 19 + 3;
+                    return (
+                        <g key={i}>
+                            <path d={`M28 ${y} Q${28 - sp * 0.55} ${y + 1} ${28 - sp} ${y - sp * 0.32}`} stroke={c} strokeWidth="0.85" fill="none" strokeLinecap="round"/>
+                            <path d={`M28 ${y} Q${28 + sp * 0.55} ${y + 1} ${28 + sp} ${y - sp * 0.32}`} stroke={c} strokeWidth="0.85" fill="none" strokeLinecap="round"/>
+                        </g>
+                    );
+                })}
+                <ellipse cx="28" cy="11" rx="16" ry="20" stroke={c} strokeWidth="1.5" fill="none"/>
+                <ellipse cx="28" cy="11" rx="9" ry="11" fill={c} opacity="0.42"/>
+                <circle cx="28" cy="11" r="4.5" fill={c}/>
+                <circle cx="26" cy="9" r="1.5" fill="white" opacity="0.55"/>
+            </svg>
+
+            {/* ── Vrindavan Kadamba blossoms — top right ── */}
+            <svg style={{ position: 'absolute', top: '7%', right: '2%', opacity: 0.042 }}
+                 width="90" height="130" viewBox="0 0 60 90">
+                <path d="M30 88 Q29 60 31 32" stroke={c} strokeWidth="3" fill="none" strokeLinecap="round"/>
+                <path d="M31 52 Q44 42 54 32" stroke={c} strokeWidth="2" fill="none" strokeLinecap="round"/>
+                <path d="M31 36 Q19 26 11 16" stroke={c} strokeWidth="2" fill="none" strokeLinecap="round"/>
+                {([[31, 30], [54, 30], [11, 14]] as [number, number][]).map(([bx, by], i) => (
+                    <g key={i}>
+                        <circle cx={bx} cy={by} r="9" fill={c} opacity="0.45"/>
+                        {Array.from({ length: 14 }, (_, j) => {
+                            const a = (j * (360 / 14) * Math.PI) / 180;
+                            return <line key={j} x1={bx} y1={by} x2={bx + Math.cos(a) * 9} y2={by + Math.sin(a) * 9} stroke={c} strokeWidth="1" opacity="0.75"/>;
+                        })}
+                        <circle cx={bx} cy={by} r="4" fill={c}/>
+                    </g>
+                ))}
+            </svg>
+
+            {/* ── Bottom scattered lotus flowers ── */}
+            {([12, 38, 63, 88] as number[]).map((xPct, idx) => (
+                <svg key={idx} style={{ position: 'absolute', bottom: -18, left: `${xPct}%`, transform: 'translateX(-50%)', opacity: 0.036 }}
+                     width="88" height="88" viewBox="0 0 60 60">
+                    {Array.from({ length: 8 }, (_, i) => (
+                        <g key={i} transform={`rotate(${i * 45}, 30, 30)`}>
+                            <ellipse cx="30" cy="7" rx="5" ry="11" fill={c}/>
+                        </g>
+                    ))}
+                    {Array.from({ length: 8 }, (_, i) => (
+                        <g key={i} transform={`rotate(${i * 45 + 22.5}, 30, 30)`}>
+                            <ellipse cx="30" cy="14" rx="4" ry="8" fill={c} opacity="0.65"/>
+                        </g>
+                    ))}
+                    <circle cx="30" cy="30" r="7" fill={c}/>
+                </svg>
+            ))}
+
+            {/* ── Krishna's bansuri (bamboo flute) ── */}
+            <svg style={{ position: 'absolute', bottom: '22%', right: '3%', opacity: 0.05, transform: 'rotate(-24deg)' }}
+                 width="200" height="36" viewBox="0 0 200 28">
+                <path d="M8 14 Q50 8 100 14 Q150 20 192 14" stroke={c} strokeWidth="4.5" fill="none" strokeLinecap="round"/>
+                <path d="M8 14 Q50 8 100 14 Q150 20 192 14" stroke="rgba(255,200,150,0.15)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                {([42, 66, 90, 114, 138, 162] as number[]).map(x => (
+                    <circle key={x} cx={x} cy={x < 100 ? 12.5 : 15.5} r="3" fill={c} opacity="0.8"/>
+                ))}
+                <circle cx="14" cy="14" r="5.5" fill="none" stroke={c} strokeWidth="1.5"/>
+            </svg>
+        </div>
     );
 }
 
@@ -412,7 +581,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
 
     const fetchEntries = useCallback(async () => {
         try {
-            const from = daysAgo(30);
+            const from = daysAgo(90);
             const to = TODAY;
             const res = await fetch(`/api/entries?from=${from}&to=${to}`, { headers: getAuthHeaders() });
             
@@ -429,9 +598,29 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
         try {
             const res = await fetch('/api/stats', { headers: getAuthHeaders() });
             if (res.ok) {
-                const data = await res.json();
+                const apiData = await res.json();
                 const computed = calcStats(entries);
-                setStats({ ...computed, ...data });
+
+                // The API has ALL entries (not just the last 30 days displayed locally),
+                // so its projection is far more accurate. Map API fields to display fields.
+                let projDate = computed.projDate;
+                let daysRem = computed.daysRem;
+
+                if (apiData.projectedCompletionDate === 'COMPLETE') {
+                    projDate = 'Complete! 🎉';
+                    daysRem = 0;
+                } else if (
+                    apiData.projectedCompletionDate &&
+                    apiData.projectedCompletionDate !== 'INSUFFICIENT_DATA'
+                ) {
+                    const d = new Date(apiData.projectedCompletionDate + 'T00:00:00');
+                    projDate = d.toLocaleDateString('en-IN', {
+                        year: 'numeric', month: 'long', day: 'numeric',
+                    });
+                    daysRem = apiData.estimatedDaysRemaining ?? daysRem;
+                }
+
+                setStats({ ...computed, ...apiData, projDate, daysRem });
             }
         } catch (err) {
             console.error('Failed to fetch stats:', err);
@@ -520,7 +709,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
         if (!entry) {
             return (
                 <div className="cta-card">
-                    <div className="cta-icon">📿</div>
+                    <div className="cta-icon">🪷</div>
                     <div className="cta-title">{isToday ? "Log Today's Sadhana" : 'No Entry'}</div>
                     <div className="cta-sub">
                         {isToday ? 'How many maalas did you chant today?' : `${dayLabel}, ${fullDate}`}
@@ -578,12 +767,17 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
         return (
             <div className="app">
                 <style>{CSS}</style>
+                <VrindavanBg />
                 <div className="auth-screen">
                     <div className="auth-card">
-                        <div className="auth-logo">🙏</div>
+                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                            <ISKCONLogo size={68} />
+                        </div>
                         <div className="auth-title">Naam Jaap Tracker</div>
-                        <div className="auth-sub">हरे कृष्ण — 10 Crore</div>
-                        
+                        <div className="auth-mantra">हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे</div>
+                        <div className="auth-mantra">हरे राम हरे राम राम राम हरे हरे</div>
+                        <div className="auth-sub">— Track your 10 Crore sankalpa —</div>
+
                         <button className="auth-btn google" onClick={onLogin}>
                             <svg width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -603,7 +797,11 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
         return (
             <div className="app">
                 <style>{CSS}</style>
-                <div className="loading">Loading...</div>
+                <VrindavanBg />
+                <div className="loading">
+                    <ISKCONLogo size={40} />
+                    <span style={{ marginLeft: 14 }}>Loading...</span>
+                </div>
             </div>
         );
     }
@@ -613,12 +811,13 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
     return (
         <div className="app">
             <style>{CSS}</style>
+            <VrindavanBg />
             <div className="header">
                 <div className="header-inner">
-                    <span style={{ fontSize: 24 }}>🙏</span>
+                    <ISKCONLogo size={34} />
                     <div>
                         <h1>Naam Jaap Tracker</h1>
-                        <div className="header-sub">हरे कृष्ण — 10 Crore</div>
+                        <div className="header-sub">हरे कृष्ण हरे कृष्ण — 10 Crore Naam</div>
                     </div>
                     <button 
                         onClick={onLogout}
@@ -644,6 +843,13 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
             <div className="content">
                 {tab === 'today' && (
                     <div>
+                        <div style={{
+                            textAlign: 'center', fontSize: 11, color: 'var(--text3)',
+                            letterSpacing: '0.06em', padding: '10px 0 14px',
+                            fontFamily: 'var(--mono)',
+                        }}>
+                            🪷 हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे 🪷
+                        </div>
                         <EntryEditor dateKey={TODAY} />
                         <div className="stat-grid sg3">
                             {[
@@ -686,12 +892,12 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div className="card-label">Total Names Chanted</div>
-                                    <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--gold)', fontFamily: 'var(--mono)' }}>
-                                        {fmtIN(currentStats.totalNames)}
-                                    </div>
-                                    <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2, marginBottom: 12 }}>
-                                        of {fmtIN(GOAL)} ({currentStats.totalMaalas.toLocaleString('en-IN')} maalas)
-                                    </div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--gold)', fontFamily: 'var(--mono)', textShadow: '0 0 20px rgba(255,107,0,0.4)' }}>
+                                    {fmtIN(currentStats.totalNames)}
+                                </div>
+                                <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2, marginBottom: 12 }}>
+                                    of {fmtIN(GOAL)} ({currentStats.totalMaalas.toLocaleString('en-IN')} maalas)
+                                </div>
                                     <div className="progress-bar-wrap">
                                         <div className="progress-fill" style={{ width: `${Math.min(currentStats.percentComplete, 100)}%` }} />
                                     </div>
@@ -724,7 +930,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                                 <div className="card-label">Projected Completion</div>
                                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--gold)', marginBottom: 4 }}>{currentStats.projDate}</div>
                                 <div style={{ fontSize: 12, color: 'var(--text2)' }}>~{currentStats.daysRem.toLocaleString('en-IN')} days left</div>
-                                <div style={{ marginTop: 10, padding: '8px 10px', background: 'rgba(0,0,0,0.2)', borderRadius: 6, fontSize: 10, color: 'var(--text3)', fontFamily: 'var(--mono)' }}>
+                                <div style={{ marginTop: 10, padding: '8px 10px', background: 'rgba(13,5,0,0.5)', borderRadius: 6, fontSize: 10, color: 'var(--text3)', fontFamily: 'var(--mono)' }}>
                                     Weighted: 50% recent · 30% monthly · 20% all-time
                                 </div>
                             </div>
@@ -737,7 +943,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                                     <div className="bar-col" key={d.date} title={`${d.date}: ${d.maalas}m`}>
                                         <div className="bar" style={{
                                             height: Math.min((d.maalas / 24) * 48, 48),
-                                            background: d.maalas >= 16 ? 'linear-gradient(to top, #CA8A04, #EAB308)' : d.maalas > 0 ? 'linear-gradient(to top, #44403C, #78716C)' : 'transparent'
+                                            background: d.maalas >= 16 ? 'linear-gradient(to top, #E05500, #FF6B00)' : d.maalas > 0 ? 'linear-gradient(to top, #4A2010, #7A4020)' : 'transparent'
                                         }} />
                                     </div>
                                 ))}
@@ -766,7 +972,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                                 return (
                                     <button key={dk}
                                         className={`cal-cell ${isT ? 'cal-today' : ''} ${isSel ? 'cal-sel' : ''}`}
-                                        style={{ background: isSel ? undefined : m > 0 ? `rgba(234,179,8,${0.05 + intensity * 0.25})` : 'var(--surface)', color: m > 0 ? 'var(--text)' : 'var(--text3)' }}
+                                        style={{ background: isSel ? undefined : m > 0 ? `rgba(255,107,0,${0.06 + intensity * 0.28})` : 'var(--surface)', color: m > 0 ? 'var(--text)' : 'var(--text3)' }}
                                         onClick={() => setSelDate(new Date(dk + 'T00:00:00'))}
                                     >
                                         <span>{day}</span>
