@@ -22,6 +22,8 @@ import {
     signInWithRedirect,
     getRedirectResult,
     signOut as firebaseSignOut,
+    onAuthStateChanged,
+    User,
     UserCredential,
 } from 'firebase/auth';
 
@@ -99,6 +101,26 @@ export async function checkRedirectResult(): Promise<string | null> {
         console.error('Redirect result error:', error);
         return null;
     }
+}
+
+/**
+ * Subscribe to sign-in state. Firebase keeps the session across reloads, so this
+ * fires once on load with the restored user (or null). Returns an unsubscribe function.
+ */
+export function onAuthChange(callback: (user: User | null) => void): () => void {
+    return onAuthStateChanged(getClientAuth(), callback);
+}
+
+/**
+ * Get a valid ID token for API calls, or null if signed out.
+ * Firebase ID tokens expire after an hour; getIdToken() returns the cached token
+ * while it is still valid and refreshes it automatically when it is about to expire.
+ * Pass forceRefresh to get a brand-new token (e.g. after the server rejected one).
+ */
+export async function getFreshIdToken(forceRefresh = false): Promise<string | null> {
+    const auth = getClientAuth();
+    await auth.authStateReady();
+    return auth.currentUser ? auth.currentUser.getIdToken(forceRefresh) : null;
 }
 
 /** Sign out the current user. */

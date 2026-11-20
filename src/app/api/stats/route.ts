@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest } from '@/lib/auth-middleware';
 import { computeStats } from '@/lib/stats-calculator';
-import { getTodayString } from '@/lib/date-helpers';
+import { resolveClientToday } from '@/lib/date-helpers';
 
 export async function GET(request: NextRequest) {
     const authResult = await authenticateRequest(request);
@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
     const { firestore } = authResult;
 
     try {
-        const today = getTodayString();
+        // Use the user's local date (sent by the client) so streaks and averages
+        // are counted against their "today", not the server's UTC date.
+        const today = resolveClientToday(new URL(request.url).searchParams.get('today'));
 
         // Fetch all entries for the user
         const entries = await firestore.getAllEntries();

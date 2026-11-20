@@ -6,6 +6,7 @@
  */
 
 import { CHANTING } from './constants';
+import { latestPossibleToday } from './date-helpers';
 
 export interface ValidationResult {
     valid: boolean;
@@ -56,10 +57,9 @@ export function validateDate(dateStr: unknown): ValidationResult {
         return { valid: false, error: `"${dateStr}" is not a valid calendar date` };
     }
 
-    // Reject future dates
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    if (date > today) {
+    // Reject future dates. Compare against the latest date any timezone can be on,
+    // so a user ahead of the server's clock (e.g. India vs UTC) can log their today.
+    if (dateStr > latestPossibleToday()) {
         return { valid: false, error: `date "${dateStr}" cannot be in the future` };
     }
 

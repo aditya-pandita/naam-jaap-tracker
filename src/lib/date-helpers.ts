@@ -23,6 +23,29 @@ export function getTodayString(): string {
 }
 
 /**
+ * Latest date any user can be on right now, as YYYY-MM-DD.
+ * The server clock (UTC on Vercel) can be up to 14 hours behind the user's local
+ * date (UTC+14), so "today" for a user may be tomorrow for the server.
+ */
+export function latestPossibleToday(): string {
+    return formatDate(new Date(Date.now() + 14 * 60 * 60 * 1000));
+}
+
+/**
+ * Resolve the user's local "today" from a client-supplied YYYY-MM-DD value.
+ * Accepts it only if it is within one day of the server's date (any real timezone
+ * falls in that window); otherwise falls back to the server's date.
+ */
+export function resolveClientToday(clientToday: string | null | undefined): string {
+    const serverToday = getTodayString();
+    if (!clientToday || !/^\d{4}-\d{2}-\d{2}$/.test(clientToday)) return serverToday;
+    const diffDays =
+        (new Date(clientToday + 'T00:00:00').getTime() - new Date(serverToday + 'T00:00:00').getTime()) /
+        86_400_000;
+    return Math.abs(diffDays) <= 1 ? clientToday : serverToday;
+}
+
+/**
  * Get the number of days in a given month (0-indexed month).
  * @param year - Full 4-digit year
  * @param month - 0-indexed month (0 = January, 11 = December)

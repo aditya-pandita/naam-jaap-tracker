@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
-import { signInWithGoogle, signOut } from '@/lib/firebase-client';
-import { getTodayString, daysAgo } from '@/lib/date-helpers';
+import { getFreshIdToken } from '@/lib/firebase-client';
+import { getTodayString, daysAgo, formatDate } from '@/lib/date-helpers';
 import { CHANTING } from '@/lib/constants';
 
 const GOAL = CHANTING.DEFAULT_GOAL_NAMES;
 const NAMES_PER_MAALA = CHANTING.NAMES_PER_MAALA;
 
-function fmt(d: Date) { return d.toISOString().split('T')[0]; }
+// Local calendar date (YYYY-MM-DD). Never use toISOString() here: it converts to UTC,
+// which shifts the date back a day for users east of UTC (e.g. India before 5:30 AM,
+// and every local-midnight Date such as a clicked calendar day).
+const fmt = formatDate;
 function fmtIN(n: number) {
     if (n >= 1e7) return (n / 1e7).toFixed(2) + ' Cr';
     if (n >= 1e5) return (n / 1e5).toFixed(2) + ' L';
@@ -551,12 +554,25 @@ function VrindavanBg() {
     );
 }
 
-function getAuthHeaders() {
-    const token = localStorage.getItem('authToken');
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+/**
+ * fetch() with a current Firebase ID token. The token is refreshed automatically
+ * before it expires; if the server still rejects it (401), retry once with a
+ * force-refreshed token.
+ */
+async function authFetch(url: string, init: RequestInit = {}): Promise<Response> {
+    const send = async (forceRefresh: boolean) => {
+        const token = await getFreshIdToken(forceRefresh);
+        return fetch(url, {
+            ...init,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                ...init.headers,
+            },
+        });
     };
+    const res = await send(false);
+    return res.status === 401 ? send(true) : res;
 }
 
 interface DashboardProps {
@@ -583,7 +599,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
         try {
             const from = daysAgo(90);
             const to = TODAY;
-            const res = await fetch(`/api/entries?from=${from}&to=${to}`, { headers: getAuthHeaders() });
+            const res = await authFetch(`/api/entries?from=${from}&to=${to}`);
             
             if (res.ok) {
                 const data = await res.json();
@@ -596,7 +612,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
 
     const fetchStats = useCallback(async () => {
         try {
-            const res = await fetch('/api/stats', { headers: getAuthHeaders() });
+            const res = await authFetch(`/api/stats?today=${TODAY}`);
             if (res.ok) {
                 const apiData = await res.json();
                 const computed = calcStats(entries);
@@ -620,13 +636,32 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                     daysRem = apiData.estimatedDaysRemaining ?? daysRem;
                 }
 
-                setStats({ ...computed, ...apiData, projDate, daysRem });
+                // The API names several fields differently from the display fields, so map
+                // them explicitly; otherwise the display keeps values computed from only the
+                // entries loaded on the client. Fall back to the local value if a field is missing.
+                const num = (v: unknown, fallback: number) => (typeof v === 'number' ? v : fallback);
+                const percentComplete = num(apiData.percentComplete, computed.percentComplete);
+
+                setStats({
+                    ...computed,
+                    ...apiData,
+                    percentComplete,
+                    percent: percentComplete.toFixed(2),
+                    streak: num(apiData.currentStreak, computed.streak),
+                    avgMaalas: num(apiData.allTimeAvgMaalas, parseFloat(computed.avgMaalas)).toFixed(1),
+                    last7: num(apiData.last7DaysAvgMaalas, parseFloat(computed.last7)).toFixed(1),
+                    last30: num(apiData.last30DaysAvgMaalas, parseFloat(computed.last30)).toFixed(1),
+                    totalDays: num(apiData.totalDaysTracked, computed.totalDays),
+                    activeDays: num(apiData.totalDaysWithEntries, computed.activeDays),
+                    projDate,
+                    daysRem,
+                });
             }
         } catch (err) {
             console.error('Failed to fetch stats:', err);
             setStats(calcStats(entries));
         }
-    }, [entries]);
+    }, [entries, TODAY]);
 
     useEffect(() => {
         if (isAuthenticated && !initialLoadDone) {
@@ -645,9 +680,8 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
     const saveEntry = async (date: string, maalas: number) => {
         if (isNaN(maalas) || maalas < 0 || maalas > 200) return;
         try {
-            const res = await fetch('/api/entries', {
+            const res = await authFetch('/api/entries', {
                 method: 'POST',
-                headers: getAuthHeaders(),
                 body: JSON.stringify({ date, maalas }),
             });
             
@@ -663,9 +697,8 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
 
     const deleteEntry = async (date: string) => {
         try {
-            const res = await fetch(`/api/entries/${date}`, {
+            const res = await authFetch(`/api/entries/${date}`, {
                 method: 'DELETE',
-                headers: getAuthHeaders(),
             });
             
             if (res.ok) {
