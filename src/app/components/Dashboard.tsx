@@ -841,6 +841,8 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
     }
 
     const currentStats = stats || calcStats(entries);
+    // Names per day at the current pace: the same 7/30/all-time weighting as the completion estimate.
+    const paceNames = (parseFloat(currentStats.last7) * .5 + parseFloat(currentStats.last30) * .3 + parseFloat(currentStats.avgMaalas) * .2) * NAMES_PER_MAALA || 0;
 
     return (
         <div className="app">
@@ -884,7 +886,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                         }}>
                             🪷 हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे 🪷
                         </div>
-                        <MilestonePath totalNames={currentStats.totalNames} />
+                        <MilestonePath totalNames={currentStats.totalNames} namesPerDay={paceNames} />
                         <EntryEditor dateKey={TODAY} />
                         <div className="stat-grid sg3">
                             {[
@@ -916,7 +918,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
 
                 {tab === 'overview' && (
                     <div>
-                        <MilestonePath totalNames={currentStats.totalNames} />
+                        <MilestonePath totalNames={currentStats.totalNames} namesPerDay={paceNames} />
                         <div className="card">
                             <div className="progress-row">
                                 <div className="ring-wrap">

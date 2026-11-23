@@ -216,6 +216,9 @@ const css = `
 .mp-kicker { font-size: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--gold); }
 .mp-title { font-size: 17px; font-weight: 700; color: var(--text); margin-top: 2px; }
 .mp-status { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-top: 3px; }
+.mp-eta { font-size: 12px; color: var(--text2); margin-top: 6px; }
+.mp-eta b { color: var(--gold); font-family: var(--mono); font-weight: 600; }
+.mp-eta span { color: var(--text3); }
 .mp-text { font-size: 14px; line-height: 1.6; color: var(--text2); margin-top: 8px; }
 .mp-bar { margin-top: 12px; }
 `;
@@ -248,7 +251,21 @@ function Disc({ m, state, size, selected = false, arc }: {
     );
 }
 
-export default function MilestonePath({ totalNames }: { totalNames: number }) {
+/** Projected date for reaching `remaining` names at `namesPerDay`, or null if there is no pace yet. */
+function projectDate(remaining: number, namesPerDay: number): { date: string; days: number } | null {
+    if (!(namesPerDay > 0)) return null;
+    const days = Math.ceil(remaining / namesPerDay);
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return { date: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }), days };
+}
+
+/**
+ * `namesPerDay` is the current chanting pace (the same weighted average the
+ * Overview uses for the 10 Cr completion estimate). It projects a date for the
+ * next milestone only.
+ */
+export default function MilestonePath({ totalNames, namesPerDay }: { totalNames: number; namesPerDay: number }) {
     const progress = totalNames / CRORE;                                  // in Crore
     const reached = MILESTONES.filter(m => progress >= m.crore).length;
     const next = MILESTONES[reached] ?? null;
@@ -281,6 +298,7 @@ export default function MilestonePath({ totalNames }: { totalNames: number }) {
         ? leg * 100
         : Math.min(100, (totalNames / (sel.crore * CRORE)) * 100);
     const selFrom = selState === 'next' && sel.crore > 1 ? ` from ${sel.crore - 1} Cr` : '';
+    const projection = next && sel === next ? projectDate(selRemaining, namesPerDay) : null;
     const kicker = selState === 'done' ? 'Milestone reached' : sel === next ? 'Next step' : 'Further ahead';
 
     return (
@@ -343,6 +361,18 @@ export default function MilestonePath({ totalNames }: { totalNames: number }) {
                             ? 'Reached ✓'
                             : `${formatIndianNumber(selRemaining)} names to go · ${selPct.toFixed(1)}% of the way${selFrom}`}
                     </div>
+                    {sel === next && (
+                        <div className="mp-eta">
+                            {projection ? (
+                                <>
+                                    Projected: <b>{projection.date}</b>
+                                    <span> · ~{projection.days.toLocaleString('en-IN')} {projection.days === 1 ? 'day' : 'days'} at your current pace</span>
+                                </>
+                            ) : (
+                                <span>Log a few days of chanting to see a projected date</span>
+                            )}
+                        </div>
+                    )}
                     <div className="mp-text">{sel.description}</div>
                     {selState !== 'done' && (
                         <div className="progress-bar-wrap mp-bar">
