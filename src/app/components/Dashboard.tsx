@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getFreshIdToken } from '@/lib/firebase-client';
 import { getTodayString, daysAgo, formatDate } from '@/lib/date-helpers';
 import { CHANTING } from '@/lib/constants';
+import MilestonePath from './MilestonePath';
 
 const GOAL = CHANTING.DEFAULT_GOAL_NAMES;
 const NAMES_PER_MAALA = CHANTING.NAMES_PER_MAALA;
@@ -883,6 +884,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
                         }}>
                             🪷 हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे 🪷
                         </div>
+                        <MilestonePath totalNames={currentStats.totalNames} />
                         <EntryEditor dateKey={TODAY} />
                         <div className="stat-grid sg3">
                             {[
@@ -914,6 +916,7 @@ export default function Dashboard({ isAuthenticated, onLogin, onLogout }: Dashbo
 
                 {tab === 'overview' && (
                     <div>
+                        <MilestonePath totalNames={currentStats.totalNames} />
                         <div className="card">
                             <div className="progress-row">
                                 <div className="ring-wrap">
